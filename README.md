@@ -16,13 +16,31 @@ Install Shield Cabinet File의 추출을 위해 검색해본 결과 [Universal E
 ## 지원되지 않는 코덱으로 인한 실행 불가 ㅠㅠ
 Windows에서 보안문제로 Indeo 코덱을 기본으로 제공하지 않으며 잘 사용되지 않아 더 이상 찾아보기도 힘듭니다.
 일단 설치하여야 분석 가능하지만 Windows 내장 코덱 파일로 동영상들을 재인코딩하여도 무방합니다.  
-[컴퓨터에 설치되어 있는 코덱을 확인하는 방법](https://support.microsoft.com/en-us/windows/codecs-faq-392483a0-b9ac-27c7-0f61-5a7f18d408af)
-[Indeo 코덱 보안 이슈 공지](https://support.microsoft.com/ko-kr/topic/microsoft-%EB%B3%B4%EC%95%88-%EA%B6%8C%EA%B3%A0-indeo-%EC%BD%94%EB%8D%B1%EC%9D%98-%EC%B7%A8%EC%95%BD%EC%84%B1%EC%9C%BC%EB%A1%9C-%EC%9D%B8%ED%95%9C-%EC%9B%90%EA%B2%A9-%EC%BD%94%EB%93%9C-%EC%8B%A4%ED%96%89-2009%EB%85%84-12%EC%9B%94-8%EC%9D%BC-680127c6-f4fd-e533-b641-6ab3a25fb4f4)
-``` 샤나인코더 기준 설정 테스트 완료 값
+- [컴퓨터에 설치되어 있는 코덱을 확인하는 방법](https://support.microsoft.com/en-us/windows/codecs-faq-392483a0-b9ac-27c7-0f61-5a7f18d408af)
+- [Indeo 코덱 보안 이슈 공지](https://support.microsoft.com/ko-kr/topic/microsoft-%EB%B3%B4%EC%95%88-%EA%B6%8C%EA%B3%A0-indeo-%EC%BD%94%EB%8D%B1%EC%9D%98-%EC%B7%A8%EC%95%BD%EC%84%B1%EC%9C%BC%EB%A1%9C-%EC%9D%B8%ED%95%9C-%EC%9B%90%EA%B2%A9-%EC%BD%94%EB%93%9C-%EC%8B%A4%ED%96%89-2009%EB%85%84-12%EC%9B%94-8%EC%9D%BC-680127c6-f4fd-e533-b641-6ab3a25fb4f4)
+``` 샤나인코더 기준 설정 테스트 완료 값(인코딩 설정)
  -f avi
  -c:v mpeg4 -q:v 2.5
  -c:a libmp3lame -ac 2 -b:a 128k
  -sn -map_metadata -1 -map_chapters -1
+ ```
+ ``` 동영상 파일 목록
+설치경로\objs\*.obi
+disk?\maps
+OPEN.zmk
+LOGO.zmk
+01ASCA.zmk
+02ASURA.zmk
+03FLAG.zmk
+04CYRUP.zmk
+05DAKA.zmk
+06END1.zmk
+07END2.zmk
+08INFRN.zmk
+09MAP1.zmk
+10MAP2.zmk
+11VS1.zmk
+12VS2.zmk
  ```
 
 ## 디스크 구성
