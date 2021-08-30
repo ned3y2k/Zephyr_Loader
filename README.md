@@ -18,6 +18,12 @@ Windows에서 보안문제로 Indeo 코덱을 기본으로 제공하지 않으�
 일단 설치하여야 분석 가능하지만 Windows 내장 코덱 파일로 동영상들을 재인코딩하여도 무방합니다.  
 [컴퓨터에 설치되어 있는 코덱을 확인하는 방법](https://support.microsoft.com/en-us/windows/codecs-faq-392483a0-b9ac-27c7-0f61-5a7f18d408af)
 [Indeo 코덱 보안 이슈 공지](https://support.microsoft.com/ko-kr/topic/microsoft-%EB%B3%B4%EC%95%88-%EA%B6%8C%EA%B3%A0-indeo-%EC%BD%94%EB%8D%B1%EC%9D%98-%EC%B7%A8%EC%95%BD%EC%84%B1%EC%9C%BC%EB%A1%9C-%EC%9D%B8%ED%95%9C-%EC%9B%90%EA%B2%A9-%EC%BD%94%EB%93%9C-%EC%8B%A4%ED%96%89-2009%EB%85%84-12%EC%9B%94-8%EC%9D%BC-680127c6-f4fd-e533-b641-6ab3a25fb4f4)
+``` 샤나인코더 기준 설정 테스트 완료 값
+ -f avi
+ -c:v mpeg4 -q:v 2.5
+ -c:a libmp3lame -ac 2 -b:a 128k
+ -sn -map_metadata -1 -map_chapters -1
+ ```
 
 ## 디스크 구성
 서풍의 광시곡은 3장의 Compact Disc([Mixed Mode CD](https://en.wikipedia.org/wiki/Mixed_Mode_CD))로 구성되어 있으며 멀티 볼륨 게임 특성상 중복 오디오 및 데이터가 존재합니다.
@@ -174,3 +180,4 @@ while(!end)
   - [Free Encoder Pack](https://www.foobar2000.org/download#:~:text=Free%20Encoder%20Pack%3A%20encoder%20binaries%20for%20the%20Converter%20component)
 - [반디집](https://kr.bandisoft.com/bandizip/)
 - [HxD](https://mh-nexus.de/en/hxd/)
+- [샤나인코더](https://shana.pe.kr/)
