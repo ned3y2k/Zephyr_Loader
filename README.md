@@ -12,6 +12,7 @@
 Install Shield 구버전으로 설치프로그램이 구성되어 있어 Windows 10 64Bit에서는 설치가 진행되지 않습니다.
 다행이지만 케케묵은 기억 속에 이 게임은 레지스트리나 별도의 시스템 파일(코덱 제외)이 없어도 실행이 된다는 사실은 알고 있었습니다.  
 Install Shield Cabinet File의 추출을 위해 검색해본 결과 [Universal Extractor](https://www.legroom.net/software/uniextract)의 추천이 있어서 그대로 진행하였습니다. 
+data1.cab 만 필요합니다.
 
 ## 지원되지 않는 코덱으로 인한 실행 불가 ㅠㅠ
 Windows에서 보안문제로 Indeo 코덱을 기본으로 제공하지 않으며 잘 사용되지 않아 더 이상 찾아보기도 힘듭니다.
@@ -79,6 +80,7 @@ LOGO.zmk
 [INDEO 4](https://en.wikipedia.org/wiki/Indeo)로 압축된 동영상 파일과 [ARJ](https://en.wikipedia.org/wiki/ARJ)로 압축된 동영상 파일이 존재합니다.
 [ARJ 압축 파일 특성](https://docs.fileformat.com/compression/arj/)상 파일의 속성이 추가적으로 포함되어 있기에 단순 바이트 비교시 파일 내용이 다르게 결과가 도출됩니다.  
 압축을 해제하면 정확한 비교가 가능하며, 다음과 같은 명령으를 명령 프롬프트에서 실행시 간단히 확장자를 변경할 수 있습니다.
+결과는 [중복되지않는파일.txt](중복되지않는파일.txt)에 정리하였습니다.
 (파일헤더를 arj, avi 파일 판단이 가능하지만 많은 파일이 아니므로 압축 해제를 시도합니다.) 
 ``` Command Prompt
 ren *.zmk *.arj
