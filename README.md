@@ -1,0 +1,127 @@
+# 서풍의 광시곡 로더
+## 소개
+1998년도 [Softmax](https://namu.wiki/w/%EC%86%8C%ED%94%84%ED%8A%B8%EB%A7%A5%EC%8A%A4)에서 발매된 게임인 창세기전 외전 서풍의 광시곡 로더입니다.  
+온라인 배포를 목적으로 하는 것이 아니며, 개인 연구 및 연구 결과 공유를 위한 목적이므로 원본 디스크 파일에 대한 질문은 받지않겠습니다.  
+이 프로그램을 사용 및 원본 이미지 파일과 같이 배포하는 등 기타 행위로 인하여 발생하는 법적 책임은 당사자 및 배포자에게 있음을 알립니다.
+
+## 빌드 환경
+- Windows 10 21H1(19043.1165)
+- Visual Studio 2019 Community(16.11.2)
+
+## 디스크 구성
+서풍의 광시곡은 3장의 Compact Disc([Mixed Mode CD](https://en.wikipedia.org/wiki/Mixed_Mode_CD))로 구성되어 있으며 멀티 볼륨 게임 특성상 중복 오디오 및 데이터가 존재합니다.
+
+## 일반적인 고전 게임 디스크 판단 루틴
+1. <span id="GetLogicalDrives">초기화시 시스템에 설치된 볼륨 확인</span>
+    - [GetLogicalDrives](https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getlogicaldrives)
+2. <span id="GetDriveTypeA">시스템에 설치된 볼륨 드라이브 유형 확인(DRIVE_CDROM=5)</span>
+    - [GetDriveTypeA](https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getdrivetypea)
+3. <span id="GetVolumeInformationA">디스크 레이블 확인</span>
+    - [GetVolumeInformationA](https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getvolumeinformationa)
+4. 파일 존재 확인
+    - [PathFileExistsA](https://docs.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-pathfileexistsa)
+    - [CreateFileA](https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea)
+    - [FindFirstFileA](https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findfirstfilea)/[FindNextFileA](https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findnextfilea)
+
+## 서풍의 광시곡 디스크 판단 루틴 분석(OllyDbg, Rohitab API Monitor v2 이용)
+0. 다른 디스크기 필요시 disk%d.Bmp 파일을 로딩하여 필요한 디스크를 표시한다.
+    - [CreateFileA 사용](https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea)
+1. [시스템에 설치된 볼륨 확인](#GetLogicalDrives)
+2. [씨디롬](#GetDriveTypeA) & [ZEPHYR%d](#GetVolumeInformationA) 레이블의 디스크 검출
+3. mciSendCommandA [MCI_OPEN](https://docs.microsoft.com/en-us/windows/win32/multimedia/mci-open), MCI_OPEN_ELEMENT | MCI_OPEN_TYPE, [MCI_OPEN_PARMS](https://docs.microsoft.com/en-us/previous-versions/ms710954(v=vs.85))
+    - mci 장비
+	- MCI_OPEN_PARMS->wDeviceID
+4. mciSendCommandA [MCI_STATUS](https://docs.microsoft.com/en-us/windows/win32/multimedia/mci-status), MCI_STATUS_ITEM, [MCI_STATUS_PARMS](https://docs.microsoft.com/en-us/windows/win32/multimedia/mci-status-parms)
+    - MCI_STATUS_PARMS->dwReturn 디스크 트랙수
+5. mciSendCommandA MCI_STATUS, [MCI_STATUS_ITEM | MCI_TRACK](https://docs.microsoft.com/ko-kr/windows/win32/multimedia/retrieving-compact-disc-track-specific-information), MCI_STATUS_LENGTH
+    - MCI_STATUS_PARMS->dwReturn dwParam2->dwTrack의 길이 
+	- [MCI_MAKE_MSF](https://docs.microsoft.com/hr-hr/windows/win32/multimedia/mci-make-msf) 참조(또는 [MCI_MAKE_TMSF](https://docs.microsoft.com/en-us/previous-versions/ms710937(v=vs.85)))
+
+## REGIONS 폴더 데이터
+별다른 과정 없이 비교가 가능하다.
+
+## MAP 폴더 데이터
+[INDEO 4](https://en.wikipedia.org/wiki/Indeo)로 압축된 동영상 파일과 [ARJ](https://en.wikipedia.org/wiki/ARJ)로 압축된 동영상 파일이 존재합니다.
+[ARJ 압축 파일 특성](https://docs.fileformat.com/compression/arj/)상 파일의 속성이 추가적으로 포함되어 있기에 단순 바이트 비교시 파일 내용이 다르게 결과가 도출됩니다.  
+압축을 해제하면 정확한 비교가 가능하며, 다음과 같은 명령으를 명령 프롬프트에서 실행시 간단히 확장자를 변경할 수 있습니다.
+(파일헤더를 arj, avi 파일 판단이 가능하지만 많은 파일이 아니므로 압축 해제를 시도합니다.) 
+``` Command Prompt
+ren *.zmk *.arj
+```
+
+### 참조
+ - [ARJ 압축 파일 특성](https://docs.fileformat.com/compression/arj/)
+ - [AVI 파일 특성](https://docs.microsoft.com/en-us/previous-versions//ms779636(v=vs.85)?redirectedfrom=MSDN)
+
+
+## CD Audio 데이터
+립핑툴에 따라 다르겠지만 하나의 디스크에서는 차이가 안나는게 정상이지만 같은 음악이더라도 다른 디스크의 음악은 립핑된 데이타 차이를 보일 수 있다.(아마 ODD에 따라 달라질 수 있다고 보지만... 자세하 내용은 관련 표준문서를 참고자 필요하다.)
+기계적으로 패턴을 분석하고자 한다면 Audio Fingerprinting 또는 DNA 추출이라 하는 방법을 이용할 수 있다.  
+- 참조문헌
+    - [MS리서치](https://www.microsoft.com/en-us/research/publication/using-audio-fingerprinting-for-duplicate-detection-and-thumbnail-generation/)
+    - https://github.com/spotify/echoprint-server
+    - https://github.com/AddictedCS/soundfingerprinting
+  
+## 원본 폴더 구성
+```
+Install Root (1.2 패치 이후)
+|- Chars
+| | Chars.Zmk, Enemy.Enc
+|- Data
+| | *.bmp, *.fnt, *.pal, *.spr, *.cur
+|- Objs
+| | *.atc, *.itc, *.obi, *.sef, *.zmk
+|- Regions
+| | *.arc
+| Zephyr.Exe
+| Zephyr%02d.sav
+```
+
+## 추가 폴더 구성(디스크 통합을 위한...)
+```
+Install Root
+|- Disk
+| |- 1,2,3,Common
+| | |- MAPS
+| | | *.zmk
+| | |- REGIONS
+| | | *.arc, *.zrc
+| |- BGM
+| | | %02d,%02d,%02d.ogg
+```
+
+### BGM 파일 규칙 설명
+- 1번CD위치,2번씨디위치,3번씨디위치.ogg
+- 해당디스크에 없는 트렉이라면 00을 넣는다.
+
+## CD 에뮬레이터 구조
+### CDROM (CDFS 및 CDAUDIO 혼성)
+- 초기 디스크 번호는 1
+- 현재 필요한 디스크번호를 disk%d.Bmp 부터 제공 받음
+- CD 오디오
+    - 재생,정지,이동,길이,트랙수
+- 볼륨레이블(명), 가상드라이브 여부, 파일 경로 리턴(CDFS 대리)
+#### CDFS(HxD, Duplicate Files Finder, 반디집을 이용한 중복 제거)
+- CreateFileA를 이용 실제 경로를 리턴
+    - 추가 폴더 구성에서 아라비아 숫자로 구성된 폴더부터 우선 탐색하며 없다면 common애서 탐색
+#### AUDIO(Foobar2000를 이용한 추출)
+- 요청받은 오디오 트랙번호 기능 OGG 검색 및 재생
+    - DirectSound 및 libvorbis 의존
+
+## 사용한 오픈소스
+- xiph.org [libogg](https://github.com/xiph/ogg) [`1.3.5`](https://downloads.xiph.org/releases/ogg/libogg-1.3.5.zip)
+- xiph.org [libvorbis](https://github.com/xiph/vorbis) [`1.3.7`](https://downloads.xiph.org/releases/vorbis/libvorbis-1.3.7.zip)
+- Microsoft [Detours](https://github.com/microsoft/Detours) [`v4.0.1`](https://github.com/microsoft/Detours/archive/refs/tags/v4.0.1.zip) 
+- [Using DirectSound to Play Audio Stream Data](https://www.codeproject.com/Articles/8396/Using-DirectSound-to-Play-Audio-Stream-Data)
+- [OGG & DirectSound](https://202psj.tistory.com/84)
+  
+## 분석 도구 및 그외 도구
+- OllyDbg [`1.10`](https://www.ollydbg.de/)
+  - 플러그인
+    - (Ultra String Reference v0.12 ustrref.dll)
+- [Rohitab](http://www.rohitab.com) API Monitor v2 (Alpha-r13) - x86 32-bit
+- [Duplicate Files Finder](https://sourceforge.net/projects/doubles/) [`v0.8.0`](https://sourceforge.net/projects/doubles/files/Duplicate%20Files%20Finder/0.8.0/)
+- [Foobar2000](https://www.foobar2000.org/download)
+  - [Free Encoder Pack](https://www.foobar2000.org/download#:~:text=Free%20Encoder%20Pack%3A%20encoder%20binaries%20for%20the%20Converter%20component)
+- [반디집](https://kr.bandisoft.com/bandizip/)
+- [HxD](https://mh-nexus.de/en/hxd/)
