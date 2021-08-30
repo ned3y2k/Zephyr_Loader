@@ -8,6 +8,17 @@
 - Windows 10 21H1(19043.1165)
 - Visual Studio 2019 Community(16.11.2)
 
+## 설치 되지 않는 서풍의 광시곡 ㅠㅠ
+Install Shield 구버전으로 설치프로그램이 구성되어 있어 Windows 10 64Bit에서는 설치가 진행되지 않습니다.
+다행이지만 케케묵은 기억 속에 이 게임은 레지스트리나 별도의 시스템 파일(코덱 제외)이 없어도 실행이 된다는 사실은 알고 있었습니다.  
+Install Shield Cabinet File의 추출을 위해 검색해본 결과 [Universal Extractor](https://www.legroom.net/software/uniextract)의 추천이 있어서 그대로 진행하였습니다. 
+
+## 지원되지 않는 코덱으로 인한 실행 불가 ㅠㅠ
+Windows에서 보안문제로 Indeo 코덱을 기본으로 제공하지 않으며 잘 사용되지 않아 더 이상 찾아보기도 힘듭니다.
+일단 설치하여야 분석 가능하지만 Windows 내장 코덱 파일로 동영상들을 재인코딩하여도 무방합니다.  
+[컴퓨터에 설치되어 있는 코덱을 확인하는 방법](https://support.microsoft.com/en-us/windows/codecs-faq-392483a0-b9ac-27c7-0f61-5a7f18d408af)
+[Indeo 코덱 보안 이슈 공지](https://support.microsoft.com/ko-kr/topic/microsoft-%EB%B3%B4%EC%95%88-%EA%B6%8C%EA%B3%A0-indeo-%EC%BD%94%EB%8D%B1%EC%9D%98-%EC%B7%A8%EC%95%BD%EC%84%B1%EC%9C%BC%EB%A1%9C-%EC%9D%B8%ED%95%9C-%EC%9B%90%EA%B2%A9-%EC%BD%94%EB%93%9C-%EC%8B%A4%ED%96%89-2009%EB%85%84-12%EC%9B%94-8%EC%9D%BC-680127c6-f4fd-e533-b641-6ab3a25fb4f4)
+
 ## 디스크 구성
 서풍의 광시곡은 3장의 Compact Disc([Mixed Mode CD](https://en.wikipedia.org/wiki/Mixed_Mode_CD))로 구성되어 있으며 멀티 볼륨 게임 특성상 중복 오디오 및 데이터가 존재합니다.
 
@@ -151,6 +162,7 @@ while(!end)
 - Microsoft [Detours](https://github.com/microsoft/Detours) [`v4.0.1`](https://github.com/microsoft/Detours/archive/refs/tags/v4.0.1.zip) 
 - [Using DirectSound to Play Audio Stream Data](https://www.codeproject.com/Articles/8396/Using-DirectSound-to-Play-Audio-Stream-Data)
 - [OGG & DirectSound](https://202psj.tistory.com/84)
+- 간단히 창모드로 실행하기 위하여 [cnc-ddraw](https://github.com/CnCNet/cnc-ddraw)
   
 ## 분석 도구 및 그외 도구
 - OllyDbg [`1.10`](https://www.ollydbg.de/)
