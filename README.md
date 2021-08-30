@@ -29,7 +29,7 @@
 1. [시스템에 설치된 볼륨 확인](#GetLogicalDrives)
 2. [씨디롬](#GetDriveTypeA) & [ZEPHYR%d](#GetVolumeInformationA) 레이블의 디스크 검출
 3. mciSendCommandA [MCI_OPEN](https://docs.microsoft.com/en-us/windows/win32/multimedia/mci-open), MCI_OPEN_ELEMENT | MCI_OPEN_TYPE, [MCI_OPEN_PARMS](https://docs.microsoft.com/en-us/previous-versions/ms710954(v=vs.85))
-    - mci 장비
+    - mci 장비 검색
 	- MCI_OPEN_PARMS->wDeviceID
 4. mciSendCommandA [MCI_STATUS](https://docs.microsoft.com/en-us/windows/win32/multimedia/mci-status), MCI_STATUS_ITEM, [MCI_STATUS_PARMS](https://docs.microsoft.com/en-us/windows/win32/multimedia/mci-status-parms)
     - MCI_STATUS_PARMS->dwReturn 디스크 트랙수
@@ -107,6 +107,43 @@ Install Root
 #### AUDIO(Foobar2000를 이용한 추출)
 - 요청받은 오디오 트랙번호 기능 OGG 검색 및 재생
     - DirectSound 및 libvorbis 의존
+
+## 추가 시험용 기능
+- 키보드 이동 추가
+    - 클릭 기능은 없으며 단순히 상하좌우로 움직임.
+- 속도조절 기능
+    - [timeGetTime](https://docs.microsoft.com/en-us/windows/win32/api/timeapi/nf-timeapi-timegettime)을 이용하여 게임속도(프레임)을 조절하는 것 같은데, 증감시는 괜찮으나 가감시에는 게임이 프리징되는 문제가 있음
+
+## 추가 관심이 필요한 영역
+- DirectDraw의 Sprite 처리 기법이나 메모리 구조를 확인하면 게임 내부 객체와 인터렉션이 가능.
+- 속도조절 가감시 프리징 개선
+- 치트키? 도 만들수 있을듯?
+
+``` c++
+/// https://www.gamedev.net/forums/topic/34089-why-is-directdraw-so-slow/
+/// 함수 원형은 아래와 비슷할것으로 보임
+DWORD Time1,Time2;
+int fps=0;
+HDC hdc; // just if not already declared
+char buffer[10]; // just need for checking
+
+while(!end)
+{
+	Time1=timeGetTime();
+	Heartbeat(); // all your routines
+
+	Time2=timeGetTime();
+	fps=1000/(Time2-Time1); // calculate FPS
+	if (lpDDsBack->GetDC(&hdc) == DD_OK) // give it out
+	{
+		SetTextColor(hdc, RGB( 255, 0, 0 ));
+		itoa(fps, buffer, 10);
+		TextOut(hdc, xpos, ypos, buffer, strlen(buffer)); // xpos, ypos = value of pos where to write FPS you have to fill it
+		lpDDsBack->ReleaseDC(hdc);
+	} //
+	lpDDsPrimary->Flip(NULL,DDFLIP_WAIT);
+}
+```
 
 ## 사용한 오픈소스
 - xiph.org [libogg](https://github.com/xiph/ogg) [`1.3.5`](https://downloads.xiph.org/releases/ogg/libogg-1.3.5.zip)
